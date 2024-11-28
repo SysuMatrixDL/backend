@@ -1,0 +1,9 @@
+version: '3'
+services:
+  open-gauss:
+    image: opengauss:6.0.0-openEuler
+    container_name: open-gauss
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/opt/openGauss/data
