@@ -2,12 +2,13 @@ from connect import OpenGaussConnector
 from container_status import container_status
 import subprocess
 
-def container_stop(db:OpenGaussConnector, cid:int, uid:int):
+def container_stop(db:OpenGaussConnector, cid:int, uid:int=None):
     # 验证用户身份
-    cmd = f'select cid from containers where uid = {uid} and cid = {cid}'
-    res = db.exec(cmd)
-    if len(res) == 0:
-        return -1, f'no container or not authorized to visit'
+    if uid is not None:
+        cmd = f'select cid from containers where uid = {uid} and cid = {cid}'
+        res = db.exec(cmd)
+        if len(res) == 0:
+            return -1, f'no container or not authorized to visit'
     # 更新容器状态
     ret, status = container_status(db, cid)
     if ret!=0:
