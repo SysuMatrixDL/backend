@@ -61,7 +61,7 @@ CREATE TABLE containers(
     portjupyter int NOT NULL, -- jupyter映射端口
     porttsb int NOT NULL, -- tensorboard映射端口
     passwd VARCHAR(255) NOT NULL, -- ssh和jupyter访问密码
-    status VARCHAR(10) NOT NULL, -- 状态：running, exitted
+    status VARCHAR(10) NOT NULL, -- 状态：running, exited
     
     PRIMARY KEY (cid),
     FOREIGN KEY (uid) REFERENCES "User"(uid) ON DELETE CASCADE,

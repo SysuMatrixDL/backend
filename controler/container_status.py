@@ -1,11 +1,12 @@
 from connect import OpenGaussConnector
 import docker
-def container_status(db:OpenGaussConnector, cid:int, uid:int):
+def container_status(db:OpenGaussConnector, cid:int, uid:int=None):
     # 验证用户身份
-    cmd = f'select cid from containers where uid = {uid} and cid = {cid}'
-    res = db.exec(cmd)
-    if len(res) == 0:
-        return -1, f'no container or not authorized to visit'
+    if uid is not None:
+        cmd = f'select cid from containers where uid = {uid} and cid = {cid}'
+        res = db.exec(cmd)
+        if len(res) == 0:
+            return -1, f'no container or not authorized to visit'
     # 获取旧容器状态
     cmd = f'select status from containers where cid = {cid}'
     old_status = db.get_one_res(cmd)[0]
@@ -33,7 +34,7 @@ def container_status(db:OpenGaussConnector, cid:int, uid:int):
         cmd = f'update containers set status = \'{new_status}\' where cid = {cid}'
         db.exec(cmd)
     
-    return new_status
+    return 0, new_status
 
 if __name__ == "__main__":
     db = OpenGaussConnector(ip='127.0.0.1', port=5432, user='superuser', pwd='OGSql@123', database='postgres')
