@@ -38,7 +38,7 @@ CREATE TABLE images (
     iid int not NULL, --镜像id
     did int not null, --设备id
     name VARCHAR(255) NOT NULL, --镜像名称
-    path VARCHAR(255) NOT NULL, --镜像物理路径
+    real_id VARCHAR(255) NOT NULL, --镜像实际ID
     PRIMARY KEY (iid)
 );
 
@@ -61,6 +61,7 @@ CREATE TABLE containers(
     portjupyter int NOT NULL, -- jupyter映射端口
     porttsb int NOT NULL, -- tensorboard映射端口
     passwd VARCHAR(255) NOT NULL, -- ssh和jupyter访问密码
+    status VARCHAR(10) NOT NULL, -- 状态：running, exitted
     
     PRIMARY KEY (cid),
     FOREIGN KEY (uid) REFERENCES "User"(uid) ON DELETE CASCADE,

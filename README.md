@@ -15,3 +15,5 @@ SysuMatrixDL的后端控制器
 `sql/open-gauss`提供启动OpenGauss的docker-compose
 
 `sql/init.sql`提供初始化数据库的SQL语句，完成必要的建表操作
+
+`sql/content.sql`初始化数据库内容，包括设备、公有镜像等设置
