@@ -66,7 +66,7 @@ def container_init(db:OpenGaussConnector, iid:int, uid:int, name:str, cpu:int, m
     # print(docker_cmd)
     
     out = subprocess.run(docker_cmd, capture_output=True, shell=True)
-    print(out)
+    # print(out)
     if out.returncode != 0:
         return -1, 'docker run failed'
     # 更新container表

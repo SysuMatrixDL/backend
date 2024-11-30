@@ -5,7 +5,7 @@ CREATE TABLE "User" (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    usage INT NOT NULL -- gpu使用时长
+    usage INT NOT NULL -- gpu使用时长(暂不启用)
 );
 
 -- 设备管理
