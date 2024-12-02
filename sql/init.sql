@@ -76,3 +76,38 @@ CREATE TABLE container_gpu(
 );
 -- 查看结果
 SELECT * FROM pg_tables where tableowner = 'superuser';
+
+-- grafana监控
+CREATE Table gauge (
+    t DATE,
+    cpu float(30),
+    mem float(30),
+    gpu_load float(30),
+    gpu_mem float(30)
+);
+
+CREATE TABLE memory (
+    t DATE,
+    total float(30),
+    used float(30)
+);
+
+CREATE TABLE gpumem (
+    t DATE,
+    total float(30),
+    used float(30)
+);
+
+CREATE TABLE diskio (
+    t DATE,
+    read_rate float(30),
+    write_rate float(30)
+);
+
+CREATE TABLE netio (
+    t DATE,
+    send_rate float(30),
+    recv_rate float(30)
+);
+
+select * from gauge;
