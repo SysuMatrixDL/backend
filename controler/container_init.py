@@ -68,7 +68,7 @@ def container_init(db:OpenGaussConnector, iid:int, uid:int, name:str, cpu:int, m
     out = subprocess.run(docker_cmd, capture_output=True, shell=True)
     # print(out)
     if out.returncode != 0:
-        return -1, 'docker run failed'
+        return -1, f'docker failed with message {out.stderr.decode('utf-8')}'
     # 更新container表
     cmd = f'insert into containers (cid, uid, iid, name, cpu, memory, portssh, portjupyter, porttsb, passwd, status) values ({cid}, {uid}, {iid}, \'{name}\', {cpu}, {mem}, {portssh}, {portjupyter}, {porttsb}, \'{passwd}\', \'running\')'
     db.exec(cmd)

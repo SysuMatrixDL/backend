@@ -29,6 +29,8 @@ def container_stop(db:OpenGaussConnector, cid:int, uid:int=None):
     # 停止容器
     docker_cmd = f'docker -H ssh://root@{ip} stop c{cid}'
     out = subprocess.run(docker_cmd, capture_output=True, shell=True)
+    if out.returncode != 0:
+        return -1, f'docker failed with message {out.stderr.decode('utf-8')}'
     # 更新container表
     cmd = f'update containers set status = \'exited\' where cid = {cid}'
     db.exec(cmd)
