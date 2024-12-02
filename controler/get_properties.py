@@ -69,13 +69,18 @@ def device_property(db:OpenGaussConnector, did:int):
     # 获取已使用的gpu
     cmd = f'select c.gid from container_gpu c join gpu_device g on c.gid = g.gid where g.did = {did}'
     gpu_used = db.exec(cmd)
-    # 获取所有镜像
-    cmd = f'select iid from images where did = {did}'
-    images = db.exec(cmd)
+    # # 获取所有镜像
+    # cmd = f'select iid from images where did = {did}'
+    # images = db.exec(cmd)
+    images = get_device_images(db, did)
     
     return total_cpu, used_cpu, cpu_name, total_memory, used_memory, gpus, gpu_used, images
     
-    
+def image_property(db:OpenGaussConnector, iid:int):
+    cmd = f'select i.iid, i.did, i.name, u.name from images i left join user_images ui on i.iid = ui.iid left join "User" u on ui.uid = u.uid where i.iid = {iid}'
+    r = db.get_one_res(cmd)
+    res = {'iid':r[0], 'did':r[1], 'name':r[2], 'user':'public' if r[3] is None else r[3]}
+    return res
     
 
 if __name__ == '__main__':
@@ -87,3 +92,4 @@ if __name__ == '__main__':
     res = device_property(db, 1)
     for i in range(len(res)):
         print(names[i], ': ', res[i])
+    print(image_property(db, 1))

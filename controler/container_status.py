@@ -28,7 +28,7 @@ def container_status(db:OpenGaussConnector, cid:int, uid:int=None):
         # 删除容器
         cmd = f'delete from containers where cid = {cid}'
         db.exec(cmd)
-        return -1, f'container not found'
+        return -1, f'no container or not authorized to visit'
     if new_status != old_status:
         # print('set new status')
         cmd = f'update containers set status = \'{new_status}\' where cid = {cid}'
