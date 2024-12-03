@@ -1,3 +1,6 @@
 paramiko
 docker
 psycopg2-binary
+fastapi
+bcrypt
+uvicorn
