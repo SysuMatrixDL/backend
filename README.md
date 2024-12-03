@@ -17,3 +17,15 @@ SysuMatrixDL的后端控制器
 `sql/init.sql`提供初始化数据库的SQL语句，完成必要的建表操作
 
 `sql/content.sql`初始化数据库内容，包括设备、公有镜像等设置
+
+## 启动运行
+
+需要 [ASGI](https://asgi.readthedocs.io/en/latest/) 服务器启动。这里使用 [uvicorn](https://www.uvicorn.org/)
+
+```shell
+pip install -r ./requirements.txt
+# 自动重载
+uvicorn main:app --reload
+# 手动重载
+uvicorn main:app
+```
