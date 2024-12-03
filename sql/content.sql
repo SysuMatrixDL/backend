@@ -3,7 +3,7 @@ insert into "User" values
 insert into gpu values
 (1, 'RTX4060 Ti 16GB');
 insert into device values
-(1, '192.168.134.196', 26, 'Intel(R) Core(TM) i7-14700K', 24576, '/home/node1/Desktop/code/db/matrixdl/container_data', '/home/node1/Desktop/code/ai/data/');
+(1, '172.18.198.204', 26, 'Intel(R) Core(TM) i7-14700K', 24576, '/home/node1/Desktop/code/db/matrixdl/container_data', '/home/node1/Desktop/code/ai/data/');
 insert into gpu_device values
 (1, 1);
 insert into images values

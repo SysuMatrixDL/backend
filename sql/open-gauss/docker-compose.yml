@@ -7,3 +7,29 @@ services:
       - "5432:5432"
     volumes:
       - ./data:/opt/openGauss/data
+    networks:
+      - og-network
+  grafana:
+    build:
+      context: ../../grafana/docker
+      dockerfile: dockerfile
+    container_name: gf-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - "GF_SECURITY_ADMIN_PASSWORD=admin"
+    depends_on:
+      - open-gauss
+    networks:
+      - og-network
+    links:
+      - open-gauss
+
+networks:
+  og-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.114.0/24
+          gateway: 192.168.114.254

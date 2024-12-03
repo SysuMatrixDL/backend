@@ -1,0 +1,3 @@
+FROM grafana/grafana
+COPY --chown=grafana:grafana grafana.db /var/lib/grafana/grafana.db
+COPY --chown=grafana:grafana defaults.ini /usr/share/grafana/conf/defaults.ini

@@ -120,5 +120,5 @@ def main(db:OpenGaussConnector, flush=10):
         )
 
 if __name__ == "__main__":
-    db = OpenGaussConnector(ip='127.0.0.1', port=5432, user='superuser', pwd='OGSql@123', database='postgres')
+    db = OpenGaussConnector(ip='172.18.198.206', port=5432, user='superuser', pwd='OGSql@123', database='postgres')
     main(db)
