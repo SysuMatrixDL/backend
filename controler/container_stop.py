@@ -1,5 +1,5 @@
-from connect import OpenGaussConnector
-from container_status import container_status
+from controler.connect import OpenGaussConnector
+from controler.container_status import container_status
 import subprocess
 
 def container_stop(db:OpenGaussConnector, cid:int, uid:int=None):

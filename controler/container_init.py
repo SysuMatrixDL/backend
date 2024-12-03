@@ -1,4 +1,4 @@
-from connect import OpenGaussConnector
+from controler.connect import OpenGaussConnector
 import subprocess
 import secrets, os
 import string
