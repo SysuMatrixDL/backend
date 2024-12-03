@@ -1,4 +1,4 @@
-from connect import OpenGaussConnector
+from controler.connect import OpenGaussConnector
 import docker
 def container_status(db:OpenGaussConnector, cid:int, uid:int=None):
     # 验证用户身份

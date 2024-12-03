@@ -1,6 +1,6 @@
-from connect import OpenGaussConnector
-from container_status import container_status
-from container_stop import container_stop
+from controler.connect import OpenGaussConnector
+from controler.container_status import container_status
+from controler.container_stop import container_stop
 import subprocess
 
 def container_rm(db:OpenGaussConnector, cid:int, uid:int):
