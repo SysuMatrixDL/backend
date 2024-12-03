@@ -1,8 +1,11 @@
+from datetime import datetime, timedelta
 from fastapi import APIRouter, Request, Response,HTTPException
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import Optional
+
+import pytz
 from controler.connect import OpenGaussConnector
 from controler.hash_pwd import generate_user_token,generate_sha256_digest
 from config import *
@@ -34,8 +37,23 @@ def login(user: UserLogin,req:Request):
         db.exec(cmd)
 
         json_resp = JSONResponse(content={"message":"{0} logged in successfully".format(user.username)})
-        json_resp.set_cookie(key="username",value=user.username)
-        json_resp.set_cookie(key="user_token", value=user_token)
+        expiration = int((datetime.now(pytz.utc)+timedelta(days=7)).timestamp())
+        json_resp.set_cookie(
+            key="username",
+            value=user.username,
+            expires=expiration,
+            # secure=True,
+            httponly=True,
+            samesite='Lax'
+        )
+        json_resp.set_cookie(
+            key="user_token",
+            value=user_token,
+            expires=expiration,
+            # secure=True,
+            httponly=True,
+            samesite='Lax'
+        )
         return json_resp
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
