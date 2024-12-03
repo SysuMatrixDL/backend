@@ -83,6 +83,10 @@ def get_network_traffic():
     
     net_io_start = net_io_end
     last_time_net = current_time
+    if send_rate < 0:
+        send_rate = 0
+    if recv_rate < 0:
+        recv_rate = 0
     return send_rate, recv_rate
 
 def get_gpu():
@@ -120,5 +124,5 @@ def main(db:OpenGaussConnector, flush=10):
         )
 
 if __name__ == "__main__":
-    db = OpenGaussConnector(ip='127.0.0.1', port=5432, user='superuser', pwd='OGSql@123', database='postgres')
+    db = OpenGaussConnector(ip='172.18.198.206', port=5432, user='superuser', pwd='OGSql@123', database='postgres')
     main(db)
