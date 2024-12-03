@@ -5,6 +5,8 @@ from pydantic import BaseModel
 from typing import Optional
 from controler.connect import OpenGaussConnector
 from controler.hash_pwd import generate_user_token,generate_sha256_digest
+from config import *
+
 router = APIRouter()
 
 class UserLogin(BaseModel):
@@ -18,7 +20,7 @@ class UserRegister(BaseModel):
 
 @router.post("/login")
 def login(user: UserLogin,req:Request):
-    db = OpenGaussConnector(ip='127.0.0.1', port=5432, user='postgres', pwd='OGSql@123', database='postgres')
+    db = OpenGaussConnector(ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
     try:
         user.password = generate_sha256_digest(user.password)
         cmd = f"SELECT uid, name, email, usage FROM \"User\" WHERE name = '{user.username}' AND password = '{user.password}';"
@@ -40,7 +42,7 @@ def login(user: UserLogin,req:Request):
 
 @router.post("/logout")
 def logout(req:Request):
-    db = OpenGaussConnector(ip='127.0.0.1', port=5432, user='postgres', pwd='OGSql@123', database='postgres')
+    db = OpenGaussConnector(ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
     try:
         username = req.cookies.get("username")
         user_token = req.cookies.get("user_token")
@@ -65,7 +67,7 @@ def logout(req:Request):
 
 @router.post("/register")
 def register(user: UserRegister):
-    db = OpenGaussConnector(ip='127.0.0.1', port=5432, user='postgres', pwd='OGSql@123', database='postgres')
+    db = OpenGaussConnector(ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
     try:
         # Check if the username or email already exists
         cmd = f"SELECT COUNT(*) FROM \"User\" WHERE name = '{user.username}' OR email = '{user.email}';"
