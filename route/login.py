@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
-from fastapi import APIRouter, Request, Response,HTTPException
+from fastapi import APIRouter, Request, Response,HTTPException, Cookie
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from typing import Optional
+from typing import Annotated
 
 import pytz
 from controler.connect import OpenGaussConnector
@@ -15,14 +15,32 @@ router = APIRouter()
 class UserLogin(BaseModel):
     username: str
     password: str
-    
+
 class UserRegister(BaseModel):
     username: str
     email: str
     password: str
 
+@router.post("/token_login")
+def token_login(
+    username: str = Cookie(None),
+    user_token: str = Cookie(None),
+    req: Request = None
+):
+    db = OpenGaussConnector(ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
+    try:
+        cmd = f"SELECT uid, name, email, usage FROM \"User\" WHERE name = '{username}' AND password = '{user_token}';"
+        res = db.get_one_res(cmd)
+        if res is None:
+            return JSONResponse(content={"error": "Invalid username or password"}, status_code=401)
+        json_resp = JSONResponse(content={"message":"{0} logged in successfully".format(username)})
+        return json_resp
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
 @router.post("/login")
-def login(user: UserLogin,req:Request):
+def token_login(user: UserLogin,req:Request):
+    print("debug")
     db = OpenGaussConnector(ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
     try:
         user.password = generate_sha256_digest(user.password)
