@@ -43,7 +43,7 @@ def container_start(db:OpenGaussConnector, cid:int, uid:int, gid:int):
     docker_cmd = f'docker -H ssh://root@{ip} start c{cid}'
     out = subprocess.run(docker_cmd, capture_output=True, shell=True)
     if out.returncode != 0:
-        return -1, f'docker failed with message {out.stderr.decode('utf-8')}'
+        return -1, f"docker failed with message {out.stderr.decode('utf-8')}"
     # 更新container表
     cmd = f'update containers set status = \'running\' where cid = {cid}'
     db.exec(cmd)

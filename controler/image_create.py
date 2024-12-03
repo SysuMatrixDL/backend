@@ -27,7 +27,7 @@ def image_create(db:OpenGaussConnector, cid:int, name:str, uid:int):
     docker_cmd = f'docker -H ssh://root@{ip} commit c{cid}'
     out = subprocess.run(docker_cmd, capture_output=True, shell=True)
     if out.returncode != 0:
-        return -1, f'docker failed with message {out.stderr.decode('utf-8')}'
+        return -1, f"docker failed with message {out.stderr.decode('utf-8')}"
     out = out.stdout.decode('utf-8').strip()
     real_id = out[len('sha256:'):]
 
