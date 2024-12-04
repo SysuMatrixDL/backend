@@ -14,4 +14,4 @@ EXPOSE 8000
 
 COPY . .
 
-ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
+ENTRYPOINT ["/bin/ash", "/app/entrypoint.sh"]
