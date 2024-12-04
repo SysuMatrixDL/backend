@@ -3,7 +3,7 @@ from controler.container_status import container_status
 import subprocess
 from config import *
 
-def container_start(db:OpenGaussConnector, cid:int, uid:int, gid:int):
+def container_start(db:OpenGaussConnector, cid:int, uid:int, gid:int | None):
     # 验证用户身份
     cmd = f'select cid from containers where uid = {uid} and cid = {cid}'
     res = db.exec(cmd)
