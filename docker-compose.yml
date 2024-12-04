@@ -9,6 +9,8 @@ services:
       - og-network
     depends_on:
       - backend
+    environment:
+      - "BACKEND_SUFFIX=http://backend:8000"
 
   backend:
     # build:
