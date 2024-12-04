@@ -16,7 +16,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ${DB_DATA_DIR}:/opt/openGauss/data
+      - ./sql/open-gauss/data:/opt/openGauss/data
     networks:
       - og-network
 
