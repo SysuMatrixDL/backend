@@ -85,7 +85,7 @@ def container_init(db:OpenGaussConnector, iid:int, uid:int, name:str, cpu:int, m
 
 if __name__ == "__main__":
     db = OpenGaussConnector(
-        ip=DB_HOST,
+        host=DB_IP,
         port=DB_PORT,
         user=DB_USER,
         pwd=DB_PWD,

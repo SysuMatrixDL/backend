@@ -31,7 +31,7 @@ def create_container(container_req: CreateRequest, req: Request):
     try:
         # Create database connection
         db = OpenGaussConnector(
-            ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
+            host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
         )
 
         status, message = user_valid.user_exists(db, req)
@@ -77,7 +77,7 @@ def create_container(container_req: CreateRequest, req: Request):
 @router.get("")
 def list_containers(req: Request):
     db = OpenGaussConnector(
-        ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
+        host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
     )
     status, message = user_valid.user_exists(db, req)
     if status == False:
@@ -99,7 +99,7 @@ class UpdateRequest(BaseModel):
 @router.put("/{cid}")
 def update_container(req: Request, update_req: UpdateRequest, cid: int):
     db = OpenGaussConnector(
-        ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
+        host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
     )
     status, message = user_valid.user_exists(db, req)
     if status == False:
@@ -143,7 +143,7 @@ class StatusRequest(BaseModel):
 @router.get("/{cid}")
 def get_container_status(req: Request, cid: int):
     db = OpenGaussConnector(
-        ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
+        host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
     )
     status, message = user_valid.user_exists(db, req)
     if status == False:
@@ -166,7 +166,7 @@ def get_container_status(req: Request, cid: int):
 @router.delete("/{cid}")
 def delete_container(req:Request,cid:int):
     db = OpenGaussConnector(
-        ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
+        host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
     )
     status, message = user_valid.user_exists(db, req)
     if status == False:

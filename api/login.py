@@ -25,7 +25,7 @@ def token_login(
     user_token: str = Cookie(None),
     req: Request = None
 ):
-    db = OpenGaussConnector(ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
+    db = OpenGaussConnector(host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
     try:
         cmd = f"SELECT uid, name, email, usage FROM \"User\" WHERE name = '{username}' AND password = '{user_token}';"
         res = db.get_one_res(cmd)
@@ -39,7 +39,7 @@ def token_login(
 @router.post("/login")
 def token_login(user: UserLogin,req:Request):
     print("debug")
-    db = OpenGaussConnector(ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
+    db = OpenGaussConnector(host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
     try:
         user.password = generate_sha256_digest(user.password)
         cmd = f"SELECT uid, name, email, usage FROM \"User\" WHERE name = '{user.username}' AND password = '{user.password}';"
@@ -76,7 +76,7 @@ def token_login(user: UserLogin,req:Request):
 
 @router.post("/logout")
 def logout(req:Request):
-    db = OpenGaussConnector(ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
+    db = OpenGaussConnector(host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
     try:
         username = req.cookies.get("username")
         user_token = req.cookies.get("user_token")
@@ -101,7 +101,7 @@ def logout(req:Request):
 
 @router.post("/register")
 def register(user: UserRegister):
-    db = OpenGaussConnector(ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
+    db = OpenGaussConnector(host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
     try:
         # Check if the username or email already exists
         cmd = f"SELECT COUNT(*) FROM \"User\" WHERE name = '{user.username}' OR email = '{user.email}';"

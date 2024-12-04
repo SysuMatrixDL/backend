@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 启动 grafana 监控数据同步到 OpenGauss 数据库的脚本
-python /app/grafana/top.py &
+python /app/top.py &
 
 # 启动后端
 uvicorn main:app --reload &

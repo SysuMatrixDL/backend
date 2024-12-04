@@ -2,14 +2,15 @@
 # python连接OpenGauss数据库
 from psycopg2 import connect
 import psycopg2
+from config import *
 
 class OpenGaussConnector:
-    def __init__(self, ip, port, user, pwd, database) -> None:
+    def __init__(self, host, port, user, pwd, database) -> None:
         params = {
             'database': database,
             'user': user,
             'password': pwd,
-            'host': ip,
+            'host': host,
             'port': port
         }
         self.conn = connect(**params)
@@ -38,7 +39,7 @@ class OpenGaussConnector:
 
 if __name__ == "__main__":
     db = OpenGaussConnector(
-        ip=DB_HOST,
+        host=DB_IP,
         port=DB_PORT,
         user=DB_USER,
         pwd=DB_PWD,

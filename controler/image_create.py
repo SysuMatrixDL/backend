@@ -44,7 +44,7 @@ def image_create(db:OpenGaussConnector, cid:int, name:str, uid:int):
 
 if __name__ == "__main__":
     db = OpenGaussConnector(
-        ip=DB_HOST,
+        host=DB_IP,
         port=DB_PORT,
         user=DB_USER,
         pwd=DB_PWD,
