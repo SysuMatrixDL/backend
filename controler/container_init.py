@@ -25,7 +25,7 @@ def get_id(db:OpenGaussConnector, id, table):
     else:
         return res
 
-def container_init(db:OpenGaussConnector, iid:int, uid:int, name:str, cpu:int, mem:int, gid:int):
+def container_init(db:OpenGaussConnector, iid:int, uid:int, name:str, cpu:int, mem:int, gid:int | None):
     # 核验身份
     cmd = f'select iid, did from images'
     res = db.exec(cmd)
