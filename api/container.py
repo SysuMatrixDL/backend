@@ -11,6 +11,7 @@ from config import *
 from controler.container_status import container_status
 from controler.container_start import container_start
 from controler.container_stop import container_stop
+from controler.container_rm import container_rm
 from controler.get_properties import get_containers
 import controler.user_valid as user_valid
 
@@ -81,9 +82,11 @@ def list_containers(req: Request):
     status, message = user_valid.user_exists(db, req)
     if status == False:
         return JSONResponse(content={"status": -1, "error": message}, status_code=401)
+    
     username = req.cookies.get("username")
     cmd = f"select uid from \"User\" where name = '{username}'"
     uid = db.get_one_res(cmd)[0]
+
     ret = get_containers(db, uid)
     ret = jsonable_encoder(ret)
     return JSONResponse(content={"status": 0, "result": ret})
@@ -147,6 +150,33 @@ def get_container_status(req: Request, cid: int):
         return JSONResponse(content={"status": -1, "error": message}, status_code=401)
     try:
         status_code, status = container_status(db, cid, None)
+        if status_code == -1:
+            return JSONResponse(
+                content={"status": -1, "error": status}, status_code=500
+            )
+        elif status_code == 0:
+            return JSONResponse(content={"status": 0, "result": status})
+        else:
+            return JSONResponse(
+                content={"status": -1, "error": "Unknown error"}, status_code=500
+            )
+    except Exception as e:
+        raise e
+    
+@router.delete("/{cid}")
+def delete_container(req:Request,cid:int):
+    db = OpenGaussConnector(
+        ip=DB_HOST, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
+    )
+    status, message = user_valid.user_exists(db, req)
+    if status == False:
+        return JSONResponse(content={"status": -1, "error": message}, status_code=401)
+    username = req.cookies.get("username")
+    cmd = f"SELECT uid from \"User\" where name ='{username}'"
+    uid = db.get_one_res(cmd)[0]
+
+    try:
+        status_code,status = container_rm(db,cid,uid)
         if status_code == -1:
             return JSONResponse(
                 content={"status": -1, "error": status}, status_code=500
