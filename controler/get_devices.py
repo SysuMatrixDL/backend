@@ -1,4 +1,5 @@
-from connect import OpenGaussConnector
+from common.connect import OpenGaussConnector
+from config import *
 
 def get_devices(db:OpenGaussConnector):
     """
@@ -11,5 +12,11 @@ def get_devices(db:OpenGaussConnector):
     return res
 
 if __name__ == "__main__":
-    db = OpenGaussConnector(ip='127.0.0.1', port=5432, user='superuser', pwd='OGSql@123', database='postgres')
+    db = OpenGaussConnector(
+        ip=DB_HOST,
+        port=DB_PORT,
+        user=DB_USER,
+        pwd=DB_PWD,
+        database=DB_CONNECT_DB
+    )
     print(get_devices(db))

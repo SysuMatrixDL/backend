@@ -2,6 +2,7 @@ import psutil
 import GPUtil
 from time import sleep
 from time import time
+from config import *
 
 from psycopg2 import connect
 import psycopg2
@@ -124,5 +125,11 @@ def main(db:OpenGaussConnector, flush=10):
         )
 
 if __name__ == "__main__":
-    db = OpenGaussConnector(ip='172.18.198.206', port=5432, user='superuser', pwd='OGSql@123', database='postgres')
+    db = OpenGaussConnector(
+        ip=DB_HOST,
+        port=DB_PORT,
+        user=DB_USER,
+        pwd=DB_PWD,
+        database=DB_CONNECT_DB
+    )
     main(db)

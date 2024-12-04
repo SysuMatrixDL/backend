@@ -37,7 +37,13 @@ class OpenGaussConnector:
             return res[0]
 
 if __name__ == "__main__":
-    db = OpenGaussConnector(ip='127.0.0.1', port=5432, user='superuser', pwd='OGSql@123', database='postgres')
+    db = OpenGaussConnector(
+        ip=DB_HOST,
+        port=DB_PORT,
+        user=DB_USER,
+        pwd=DB_PWD,
+        database=DB_CONNECT_DB
+    )
     # cmd = 'SELECT * FROM pg_tables where tableowner = \'superuser\';'
     cmd = 'insert into gpu values (2, \'asas\')'
     res = db.exec(cmd)

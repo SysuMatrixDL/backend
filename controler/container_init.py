@@ -1,7 +1,8 @@
-from controler.connect import OpenGaussConnector
+from common.connect import OpenGaussConnector
 import subprocess
 import secrets, os
 import string
+from config import *
 
 def generate_random_password(length=16):
     alphabet = string.ascii_letters + string.digits
@@ -83,6 +84,12 @@ def container_init(db:OpenGaussConnector, iid:int, uid:int, name:str, cpu:int, m
     
 
 if __name__ == "__main__":
-    db = OpenGaussConnector(ip='127.0.0.1', port=5432, user='superuser', pwd='OGSql@123', database='postgres')
+    db = OpenGaussConnector(
+        ip=DB_HOST,
+        port=DB_PORT,
+        user=DB_USER,
+        pwd=DB_PWD,
+        database=DB_CONNECT_DB
+    )
     print(container_init(db, 1, 1, 'test', 2, 2048, 1))
     

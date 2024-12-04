@@ -1,17 +1,28 @@
 version: '3'
 services:
+  backend:
+    # build:
+    #   dockerfile: dockerfile
+    image: ghcr.io/SysuMatrixDL/backend:master
+    container_name: backend
+    ports:
+      - "8000:8000"
+    networks:
+      - og-network
+
   open-gauss:
     image: opengauss:6.0.0-openEuler
     container_name: open-gauss
     ports:
       - "5432:5432"
     volumes:
-      - ./data:/opt/openGauss/data
+      - ${DB_DATA_DIR}:/opt/openGauss/data
     networks:
       - og-network
+
   grafana:
     build:
-      context: ../../grafana/docker
+      context: ./grafana/docker
       dockerfile: dockerfile
     container_name: gf-grafana
     ports:
@@ -29,6 +40,7 @@ networks:
   og-network:
     driver: bridge
     ipam:
+      # 避免和校园网网段(172.12.0.0/16)冲突
       driver: default
       config:
         - subnet: 192.168.114.0/24

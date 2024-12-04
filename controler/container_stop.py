@@ -1,6 +1,7 @@
-from controler.connect import OpenGaussConnector
+from common.connect import OpenGaussConnector
 from controler.container_status import container_status
 import subprocess
+from config import *
 
 def container_stop(db:OpenGaussConnector, cid:int, uid:int=None):
     # 验证用户身份
@@ -43,5 +44,11 @@ def container_stop(db:OpenGaussConnector, cid:int, uid:int=None):
     return 0, 'success'
 
 if __name__ == "__main__":
-    db = OpenGaussConnector(ip='127.0.0.1', port=5432, user='superuser', pwd='OGSql@123', database='postgres')
+    db = OpenGaussConnector(
+        ip=DB_HOST,
+        port=DB_PORT,
+        user=DB_USER,
+        pwd=DB_PWD,
+        database=DB_CONNECT_DB
+    )
     print(container_stop(db, 1, 1))

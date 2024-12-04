@@ -1,5 +1,6 @@
-from connect import OpenGaussConnector
+from common.connect import OpenGaussConnector
 import subprocess
+from config import *
 
 def get_id(db:OpenGaussConnector, id, table):
     cmd = f'select max({id})+1 from {table};'
@@ -42,5 +43,11 @@ def image_create(db:OpenGaussConnector, cid:int, name:str, uid:int):
     return 0, iid
 
 if __name__ == "__main__":
-    db = OpenGaussConnector(ip='127.0.0.1', port=5432, user='superuser', pwd='OGSql@123', database='postgres')
+    db = OpenGaussConnector(
+        ip=DB_HOST,
+        port=DB_PORT,
+        user=DB_USER,
+        pwd=DB_PWD,
+        database=DB_CONNECT_DB
+    )
     print(image_create(db, 1, 'mytest', 1))
