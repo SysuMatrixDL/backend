@@ -4,7 +4,7 @@
 python /app/grafana/top.py &
 
 # 启动后端
-python uvicorn main:app --reload &
+uvicorn main:app --reload &
 
 # 等待所有后台进程
 wait

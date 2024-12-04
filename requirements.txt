@@ -7,4 +7,3 @@ uvicorn
 pytz
 GPUtil
 psutil
-uvicorn
