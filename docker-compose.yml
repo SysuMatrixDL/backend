@@ -1,22 +1,12 @@
 version: '3'
 services:
-  frontend:
-    image: ghcr.io/sysumatrixdl/frontend:master
-    container_name: frontend
-    ports:
-      - "80:3000"
-    networks:
-      - og-network
-    depends_on:
-      - backend
-    environment:
-      - "BACKEND_SUFFIX=http://backend:8000"
-
   backend:
     # build:
     #   dockerfile: dockerfile
     image: ghcr.io/sysumatrixdl/backend:master
     container_name: backend
+    environment:
+      - "BACKEND_HOST=localhost"  # for local dev
     ports:
       - "8000:8000"
     networks:

@@ -4,7 +4,7 @@
 python /app/top.py &
 
 # 启动后端
-uvicorn main:app --reload &
+uvicorn main:app --reload --host "${BACKEND_HOST}" &
 
 # 等待所有后台进程
 wait
