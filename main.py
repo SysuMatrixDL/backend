@@ -9,12 +9,11 @@ import multiprocessing
 from config import *
 
 app = FastAPI(
-    # 似乎这里不生效
-    # debug= True if MATRIXDL_ENVIROMENT == "DEVELOPMENT" else False,
+    debug= True if MATRIXDL_ENVIROMENT == "DEVELOPMENT" else False,
     # reload = MATRIXDL_ENVIROMENT == "DEVELOPMENT",
+    # 似乎这里不生效
     # host=BACKEND_HOST,
-    # port=BACKEND_PORT,
-    # worker=int(MATRIXDL_WORKER)
+    # port=BACKEND_PORT
 )
 
 origins = [  # for dev
@@ -37,9 +36,8 @@ if __name__ == '__main__':
     multiprocessing.freeze_support()  # For Windows support
     uvicorn.run(
         app,
-        debug= True if MATRIXDL_ENVIROMENT == "DEVELOPMENT" else False,
         reload = MATRIXDL_ENVIROMENT == "DEVELOPMENT",
         host=BACKEND_HOST,
         port=BACKEND_PORT,
-        worker=int(MATRIXDL_WORKER)
+        workers=int(MATRIXDL_WORKER)
     )
