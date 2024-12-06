@@ -6,7 +6,7 @@ RUN pip install -r requirements.txt && \
     pyinstaller -F main.py --clean && \
     pyinstaller -F top.py --clean
 
-FROM alpine:latest
+FROM ubuntu:22.04-minimal
 
 WORKDIR /app
 
