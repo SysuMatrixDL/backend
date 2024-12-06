@@ -12,6 +12,8 @@ WORKDIR /app
 
 COPY --from=builder ./dist/* /app/
 
+COPY ./entrypoint.sh /app/
+
 EXPOSE 8000
 
 ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
