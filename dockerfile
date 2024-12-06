@@ -6,7 +6,7 @@ RUN pip install -r requirements.txt && \
     pyinstaller -F main.py --clean && \
     pyinstaller -F top.py --clean
 
-FROM ubuntu:22.04-minimal
+FROM ubuntu:22.04
 
 WORKDIR /app
 
@@ -14,4 +14,4 @@ COPY --from=builder ./dist/* /app/
 
 EXPOSE 8000
 
-ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
