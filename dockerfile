@@ -14,4 +14,4 @@ COPY --from=builder ./dist/* /app/
 
 EXPOSE 8000
 
-ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
