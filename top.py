@@ -62,7 +62,7 @@ def get_gpu():
     """
     GPUs = GPUtil.getGPUs()
     if len(GPUs) == 0:
-        return 0, 0
+        return 0, 0, 0, 0, 0
     else:
         return GPUs[0].load, GPUs[0].memoryUtil, GPUs[0].memoryUsed, GPUs[0].memoryTotal, GPUs[0].temperature
     
