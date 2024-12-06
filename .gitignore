@@ -3,3 +3,6 @@ draft.ipynb
 __pycache__
 test.sql
 local*
+build
+dist
+*.spec

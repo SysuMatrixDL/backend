@@ -1,19 +1,17 @@
 FROM python:3.11.10 AS builder
 
-COPY requirements.txt .
+COPY . .
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt && \
+    pyinstaller -F main.py --clean && \
+    pyinstaller -F top.py --clean
 
-FROM python:3.11.10-slim
-
-COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
-
-COPY --from=builder /usr/local/bin/uvicorn /usr/local/bin/uvicorn
+FROM alpine:latest
 
 WORKDIR /app
 
-EXPOSE 8000
+COPY --from=builder ./dist/* /app/
 
-COPY . .
+EXPOSE 8000
 
 ENTRYPOINT ["/bin/bash", "/app/entrypoint.sh"]

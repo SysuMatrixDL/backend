@@ -1,11 +1,22 @@
+import os
 from fastapi import FastAPI
 import api.container as container
 import api.login as login
 from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
+import multiprocessing
 
-app = FastAPI(debug=True)
+from config import *
 
-origins = [
+app = FastAPI(
+    debug= True if MATRIXDL_ENVIROMENT == "DEVELOPMENT" else False,
+    reload = MATRIXDL_ENVIROMENT == "DEVELOPMENT",
+    host=BACKEND_HOST,
+    port=BACKEND_PORT,
+    worker=int(MATRIXDL_WORKER)
+)
+
+origins = [  # for dev
     "http://localhost:5173",
     "http://localhost:8000",
 ]
@@ -20,3 +31,7 @@ app.add_middleware(
 
 app.include_router(login.router, prefix="/api")
 app.include_router(container.router,prefix="/containers")
+
+if __name__ == '__main__':
+    multiprocessing.freeze_support()  # For Windows support
+    uvicorn.run(app)
