@@ -1,5 +1,6 @@
-
 # SysuMatrixDL 的 后端 + 集中控制器
+
+`docker-compose.yml` 仅用于开发环境，不用于生产环境
 
 ## 控制节点
 
