@@ -28,10 +28,10 @@
 
 ## 调试运行
 
-确保数据库正在运行（测试服），在 `config.py` 中定义了如何连接数据库的参数，主要注意 `DB_IP`，本地调试时可通过环境变量设置测试服数据库：
+确保数据库正在运行（测试服），在 `config.py` 中定义了如何连接数据库的参数，主要注意 `DB_HOST`，本地调试时可通过环境变量设置测试服数据库：
 
 ```shell
-export DB_IP=172.18.198.206
+export DB_HOST=172.18.198.206
 ```
 
 需要 [ASGI](https://asgi.readthedocs.io/en/latest/) 服务器启动。这里使用 [uvicorn](https://www.uvicorn.org/)
