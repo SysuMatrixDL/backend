@@ -16,12 +16,6 @@
   - `connect.py` 管理 openGauss 数据库
   - ......
 
-## 工作节点
-
-即所有可用的提供算力的机器
-  
-详情见 `worker` 目录。注意 controler 节点需要能够 ssh 公钥连接所有的 worker 节点
-
 ## 数据库
 
 见 `sql` 文件夹
