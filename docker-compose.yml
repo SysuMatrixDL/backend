@@ -4,7 +4,7 @@ services:
     # build:
     #   dockerfile: dockerfile
     image: ghcr.io/sysumatrixdl/backend:master
-    container_name: backend
+    container_name: matrixdl-backend
     environment:
       - "BACKEND_HOST=localhost"  # for local dev
     ports:
@@ -15,8 +15,8 @@ services:
       - open-gauss
 
   open-gauss:
-    image: opengauss:6.0.0-openEuler
-    container_name: open-gauss
+    image: ghcr.io/sysumatrixdl/opengauss:latest
+    container_name: matrixdl-opengauss
     ports:
       - "5432:5432"
     volumes:
@@ -25,10 +25,11 @@ services:
       - og-network
 
   grafana:
-    build:
-      context: ./grafana/docker
-      dockerfile: dockerfile
-    container_name: gf-grafana
+    image: ghcr.io/sysumatrixdl/grafana:latest
+    # build:
+    #   context: ./grafana/docker
+    #   dockerfile: dockerfile
+    container_name: matridl-grafana
     ports:
       - "3000:3000"
     environment:
