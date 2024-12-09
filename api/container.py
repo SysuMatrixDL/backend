@@ -23,7 +23,7 @@ class CreateRequest(BaseModel):
     name: str
     cpu: int
     mem: int
-    gid: int
+    gid: Optional[int] = None
 
 
 @router.post("")
@@ -89,7 +89,7 @@ def list_containers(req: Request):
 
     ret = get_containers(db, uid)
     ret = jsonable_encoder(ret)
-    return JSONResponse(content={"status": 0, "result": ret})
+    return JSONResponse(content={"status": 0, "cid": ret})
 
 
 class UpdateRequest(BaseModel):

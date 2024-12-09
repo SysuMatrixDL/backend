@@ -2,6 +2,8 @@ import os
 from fastapi import FastAPI
 import api.container as container
 import api.login as login
+import api.image as image
+import api.device as device
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import multiprocessing
@@ -31,6 +33,8 @@ app.add_middleware(
 
 app.include_router(login.router, prefix="/api")
 app.include_router(container.router,prefix="/containers")
+app.include_router(image.router,prefix="/images")
+app.include_router(device.router,prefix="/devices")
 
 if __name__ == '__main__':
     multiprocessing.freeze_support()  # For Windows support
