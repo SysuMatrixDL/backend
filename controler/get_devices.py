@@ -1,5 +1,7 @@
-from common.connect import OpenGaussConnector
 from config import *
+
+from common.connect import OpenGaussConnector
+
 
 def get_devices(db:OpenGaussConnector):
     """

@@ -1,6 +1,9 @@
-from common.connect import OpenGaussConnector
 import subprocess
+
 from config import *
+
+from common.connect import OpenGaussConnector
+
 
 def get_id(db:OpenGaussConnector, id, table):
     cmd = f'select max({id})+1 from {table};'

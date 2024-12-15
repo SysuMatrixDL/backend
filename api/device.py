@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
+
+from config import *
 
 from common.connect import OpenGaussConnector
-from config import *
-import controler.user_valid as user_valid
+import common.user_valid as user_valid
+
 from controler.get_devices import get_devices
 from controler.get_properties import device_property
 

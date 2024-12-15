@@ -1,6 +1,9 @@
-from common.connect import OpenGaussConnector
 import subprocess
+
 from config import *
+
+from common.connect import OpenGaussConnector
+
 
 def image_rm(db:OpenGaussConnector, iid:int, uid:int):
     # 验证用户身份

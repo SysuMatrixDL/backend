@@ -1,8 +1,10 @@
-from common.connect import OpenGaussConnector
 import subprocess
 import secrets, os
 import string
+
 from config import *
+
+from common.connect import OpenGaussConnector
 
 def generate_random_password(length=16):
     alphabet = string.ascii_letters + string.digits
