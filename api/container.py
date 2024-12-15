@@ -175,6 +175,15 @@ def get_container_property(req: Request, cid: int):
     status, message = user_valid.user_exists(db, req)
     if status == False:
         return JSONResponse(content={"status": -1, "error": message}, status_code=401)
+    user_token = req.cookies.get("user_token")
+    cmd = f"select uid from \"User\" where user_token = '{user_token}'"
+    uid = db.get_one_res(cmd)[0]
+    cmd = f"select * from containers where uid = '{uid}' and cid={cid}"
+    res = db.get_one_res(cmd)
+
+    if res is None:
+        message = "Current user is not accessible to this private container"
+        return JSONResponse(content={"status": -1, "error": message}, status_code=401)
     try:
         name, cpu, memory, portssh, portjupyter, porttsb, passwd, ip, cpu_name, gpu_type = container_property(db, cid)
         return JSONResponse(content={
