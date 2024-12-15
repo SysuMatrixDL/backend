@@ -5,9 +5,9 @@ COPY . .
 RUN pip install -r requirements.txt && \
     pyinstaller --onefile --hidden-import=main -F main.py --clean
 
-FROM ubuntu:22.04
+FROM earthly/dind:ubuntu-24.04-docker-27.3.1-1
 
-RUN apt-get update && apt-get install -y docker openssh-client
+RUN apt-get update && apt-get install -y openssh-client
 
 WORKDIR /app
 
