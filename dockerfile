@@ -4,7 +4,7 @@ COPY . .
 
 RUN pip install -r requirements.txt && \
     pyinstaller --onefile --hidden-import=main -F main.py --clean && \
-    apt install docker ssh
+    apt install docker openssh-client
 
 FROM ubuntu:22.04
 
