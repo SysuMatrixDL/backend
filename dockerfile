@@ -3,7 +3,8 @@ FROM python:3.11.10 AS builder
 COPY . .
 
 RUN pip install -r requirements.txt && \
-    pyinstaller --onefile --hidden-import=main -F main.py --clean
+    pyinstaller --onefile --hidden-import=main -F main.py --clean && \
+    apt install docker ssh
 
 FROM ubuntu:22.04
 
