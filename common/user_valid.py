@@ -1,5 +1,6 @@
 from fastapi import Request
-from common.connect import OpenGaussConnector
+
+from .connect import OpenGaussConnector
 
 def user_exists(db:OpenGaussConnector, req:Request)-> tuple[bool, str] :
     """

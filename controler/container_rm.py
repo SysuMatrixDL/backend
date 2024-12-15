@@ -1,8 +1,12 @@
-from common.connect import OpenGaussConnector
-from controler.container_status import container_status
-from controler.container_stop import container_stop
 import subprocess
+
 from config import *
+
+from common.connect import OpenGaussConnector
+
+from .container_status import container_status
+from .container_stop import container_stop
+
 
 def container_rm(db:OpenGaussConnector, cid:int, uid:int):
     # 验证用户身份

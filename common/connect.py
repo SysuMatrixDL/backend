@@ -2,6 +2,7 @@
 # python连接OpenGauss数据库
 from psycopg2 import connect
 import psycopg2
+
 from config import *
 
 class OpenGaussConnector:

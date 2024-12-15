@@ -1,6 +1,9 @@
-from common.connect import OpenGaussConnector
-from config import *
 import docker
+
+from config import *
+
+from common.connect import OpenGaussConnector
+
 
 def get_containers(db:OpenGaussConnector, uid:int):
     """

@@ -1,10 +1,9 @@
-import os
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import api.container as container
 import api.login as login
 import api.image as image
 import api.device as device
-from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import multiprocessing
 
