@@ -26,7 +26,7 @@ def get_all_devices(req: Request):
     return JSONResponse(content=ret)
 
 
-@router.get("/{did}")
+@router.get("/property/{did}")
 def get_did_devices(req: Request, did: int):
     db = OpenGaussConnector(
         host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
@@ -44,9 +44,9 @@ def get_did_devices(req: Request, did: int):
         "cpu_name": ret_data[2],
         "total_memory": ret_data[3],
         "used_memory": ret_data[4],
-        "gpus": [{"gid": gpu[0], "name": gpu[1]} for gpu in ret_data[5]],
+        "gpus": [{"gid": gpu[0], "gpu_type": gpu[1]} for gpu in ret_data[5]],
         "gpu_used": ret_data[6],
-        "images": ret_data[7]  # This is already in the correct format
+        "ip": ret_data[7]
     }
     ret = jsonable_encoder(formatted_data)
     return JSONResponse(content=ret)

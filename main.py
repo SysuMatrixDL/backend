@@ -39,9 +39,9 @@ app.include_router(device.router,prefix="/devices")
 if __name__ == '__main__':
     multiprocessing.freeze_support()  # For Windows support
     uvicorn.run(
-        app,
+        "main:app",
         reload = MATRIXDL_ENVIROMENT == "DEVELOPMENT",
         host=BACKEND_HOST,
-        port=BACKEND_PORT,
+        port=int(BACKEND_PORT),
         workers=int(MATRIXDL_WORKER)
     )

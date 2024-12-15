@@ -19,18 +19,35 @@ class UserRegister(BaseModel):
     email: str
     password: str
 
-@router.post("/token_login")
-def token_login(
-    username: str = Cookie(None),
-    user_token: str = Cookie(None),
-    req: Request = None
-):
+@router.post("/verify")
+def token_login(req: Request):
+    username = req.cookies.get("username")
+    user_token = req.cookies.get("user_token")
+    if username is None or user_token is None:
+        return JSONResponse(content={"error": "Invalid cookies"}, status_code=400)
     db = OpenGaussConnector(host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
     try:
-        cmd = f"SELECT uid, name, email, usage FROM \"User\" WHERE name = '{username}' AND password = '{user_token}';"
+        cmd = f"SELECT uid, name, email, usage FROM \"User\" WHERE name = '{username}' AND user_token = '{user_token}';"
         res = db.get_one_res(cmd)
         if res is None:
-            return JSONResponse(content={"error": "Invalid username or password"}, status_code=401)
+            return JSONResponse(content={"error": "Unverified cookies"}, status_code=401)
+        json_resp = JSONResponse(content={"username": username}, status_code=200)
+        return json_resp
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@router.post("/token_login")
+def token_login(req: Request):
+    username = req.cookies.get("username")
+    user_token = req.cookies.get("user_token")
+    if username is None or user_token is None:
+        return JSONResponse(content={"error": "Invalid cookie"}, status_code=400)
+    db = OpenGaussConnector(host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
+    try:
+        cmd = f"SELECT uid, name, email, usage FROM \"User\" WHERE name = '{username}' AND user_token = '{user_token}';"
+        res = db.get_one_res(cmd)
+        if res is None:
+            return JSONResponse(content={"error": "Invalid cookie"}, status_code=401)
         json_resp = JSONResponse(content={"message":"{0} logged in successfully".format(username)})
         return json_resp
     except Exception as e:
@@ -38,7 +55,6 @@ def token_login(
 
 @router.post("/login")
 def token_login(user: UserLogin,req:Request):
-    print("debug")
     db = OpenGaussConnector(host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB)
     try:
         user.password = generate_sha256_digest(user.password)

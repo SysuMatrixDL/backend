@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
@@ -12,7 +12,7 @@ from controler.container_status import container_status
 from controler.container_start import container_start
 from controler.container_stop import container_stop
 from controler.container_rm import container_rm
-from controler.get_properties import get_containers
+from controler.get_properties import container_property, get_containers
 import controler.user_valid as user_valid
 
 router = APIRouter()
@@ -23,12 +23,16 @@ class CreateRequest(BaseModel):
     name: str
     cpu: int
     mem: int
-    gid: Optional[int] = None
+    gid: List[int]
 
-
-@router.post("")
+# 目前只支持一个容器一个gpu,前端支持选多个,这里对多个gpu直接返回错误
+@router.post("/create")
 def create_container(container_req: CreateRequest, req: Request):
     try:
+        if len(container_req.gid) > 1:
+            return JSONResponse(
+                content={"status": -1, "error": "目前只支持一个容器一个 gpu !"}, status_code=422
+            )
         # Create database connection
         db = OpenGaussConnector(
             host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
@@ -50,7 +54,7 @@ def create_container(container_req: CreateRequest, req: Request):
             name=container_req.name,
             cpu=container_req.cpu,
             mem=container_req.mem,
-            gid=container_req.gid,
+            gid= None if len(container_req.gid) is 0 else container_req.gid[0],
         )
 
         if status == 0:
@@ -83,9 +87,9 @@ def list_containers(req: Request):
     if status == False:
         return JSONResponse(content={"status": -1, "error": message}, status_code=401)
     
-    username = req.cookies.get("username")
-    cmd = f"select uid from \"User\" where name = '{username}'"
-    uid = db.get_one_res(cmd)[0]
+    user_token = req.cookies.get("user_token")
+    cmd = f"select uid from \"User\" where user_token = '{user_token}'"
+    uid = db.get_one_res(cmd)[0]  # 获取查询结果第一个,预期查询结果就只有一个
 
     ret = get_containers(db, uid)
     ret = jsonable_encoder(ret)
@@ -114,7 +118,7 @@ def update_container(req: Request, update_req: UpdateRequest, cid: int):
             # igonre gid
             status_code,status = container_start(db, cid, uid, None)
             if status_code == -1:
-                return JSONResponse(content={"status":-1,"error":status},status_code=500)
+                return JSONResponse(content={"status":-1, "error":status}, status_code=500)
             elif status_code == 0:
                 return JSONResponse(content={"status":0})
             else:
@@ -122,7 +126,7 @@ def update_container(req: Request, update_req: UpdateRequest, cid: int):
         elif update_req.cmd == "stop":
             status_code,status = container_stop(db,cid,uid)
             if status_code == -1:
-                return JSONResponse(content={"status":-1,"error":status},status_code=500)
+                return JSONResponse(content={"status":-1, "error":status}, status_code=500)
             elif status_code == 0:
                 return JSONResponse(content={"status":0})
             else:
@@ -140,7 +144,7 @@ class StatusRequest(BaseModel):
     uid: Optional[int] = None
 
 
-@router.get("/{cid}")
+@router.get("/status/{cid}")
 def get_container_status(req: Request, cid: int):
     db = OpenGaussConnector(
         host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
@@ -162,7 +166,33 @@ def get_container_status(req: Request, cid: int):
             )
     except Exception as e:
         raise e
-    
+
+@router.get("/property/{cid}")
+def get_container_property(req: Request, cid: int):
+    db = OpenGaussConnector(
+        host=DB_IP, port=DB_PORT, user=DB_USER, pwd=DB_PWD, database=DB_CONNECT_DB
+    )
+    status, message = user_valid.user_exists(db, req)
+    if status == False:
+        return JSONResponse(content={"status": -1, "error": message}, status_code=401)
+    try:
+        name, cpu, memory, portssh, portjupyter, porttsb, passwd, ip, cpu_name, gpu_type = container_property(db, cid)
+        return JSONResponse(content={
+            "status": 0,
+            "name": name,
+            "cpu": cpu,
+            "memory": memory,
+            "portssh": portssh,
+            "portjupyter": portjupyter,
+            "porttsb": porttsb,
+            "passwd": passwd,
+            "ip": ip,
+            "cpu_name": cpu_name,
+            "gpu_type": gpu_type
+        })
+    except Exception as e:
+        raise e
+
 @router.delete("/{cid}")
 def delete_container(req:Request,cid:int):
     db = OpenGaussConnector(

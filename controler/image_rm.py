@@ -23,7 +23,9 @@ def image_rm(db:OpenGaussConnector, iid:int, uid:int):
     docker_cmd = f'docker -H ssh://root@{ip} rmi {real_id}'
     out = subprocess.run(docker_cmd, capture_output=True, shell=True)
     if out.returncode != 0:
-        return -1, f"docker failed with message {out.stderr.decode('utf-8')}"
+        message = out.stderr.decode('utf-8')
+        if not message.find('No such image'):  # 本就不存在的虚空镜像也返回成功删除
+            return -1, message
     # 更新数据库
     cmd = f'delete from images where iid = {iid}'
     db.exec(cmd)

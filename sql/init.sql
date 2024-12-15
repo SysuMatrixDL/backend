@@ -40,6 +40,7 @@ CREATE TABLE images (
     did int not null, --设备id
     name VARCHAR(255) NOT NULL, --镜像名称
     real_id VARCHAR(255) NOT NULL, --镜像实际ID
+    public BOOLEAN NOT NULL, -- TRUE 为公开镜像, FALSE 为私有镜像
     PRIMARY KEY (iid)
 );
 
@@ -72,6 +73,7 @@ CREATE TABLE containers(
 CREATE TABLE container_gpu(
     cid int not NULL,
     gid int not NULL,
+    used int not NULL,
     FOREIGN KEY (cid) REFERENCES containers(cid) ON DELETE CASCADE,
     FOREIGN KEY (gid) REFERENCES gpu(gid) ON DELETE CASCADE
 );

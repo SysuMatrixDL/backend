@@ -10,7 +10,7 @@ def get_id(db:OpenGaussConnector, id, table):
     else:
         return res
 
-def image_create(db:OpenGaussConnector, cid:int, name:str, uid:int):
+def image_create(db:OpenGaussConnector, cid:int, name:str, uid:int, public:bool):
     """
     返回两个值，第一个值为0表示执行成功，第二个值在执行成功时表示新创建的镜像的iid，否则为报错信息
     """
@@ -32,10 +32,11 @@ def image_create(db:OpenGaussConnector, cid:int, name:str, uid:int):
     out = out.stdout.decode('utf-8').strip()
     real_id = out[len('sha256:'):]
 
-    # 获取iid
+    # 获取iidr
     iid = get_id(db, 'iid', 'images')
     # 更新images表
-    cmd = f'insert into images values ({iid}, {did}, \'{name}\', \'{real_id}\')'
+    cmd = f'insert into images values ({iid}, {did}, \'{name}\', \'{real_id}\', \'{public}\')'
+    print(cmd)
     db.exec(cmd)
     # 更新user_images表
     cmd = f'insert into user_images values ({uid}, {iid})'

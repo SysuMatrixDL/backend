@@ -50,7 +50,7 @@ def container_init(db:OpenGaussConnector, iid:int, uid:int, name:str, cpu:int, m
         return -1, 'cpu or memory not enough'
     # 判断gpu是否可用
     if gid is not None:
-        cmd = f'select gid from container_gpu where gid = {gid}'
+        cmd = f'select gid from container_gpu where gid = {gid} and used = 1'
         if len(db.exec(cmd)) > 0:
             return -1, f'gpu {gid} not available'
     # 获取端口
@@ -61,7 +61,7 @@ def container_init(db:OpenGaussConnector, iid:int, uid:int, name:str, cpu:int, m
     # 启动容器
     docker_cmd = f'docker -H ssh://root@{ip} run '
     if gid is not None:
-        docker_cmd += f'--gpus all '
+        docker_cmd += f'--gpus all --privileged '
     docker_cmd += f'-d -it -e JUPYTER_TOKEN={passwd} -v {container_data_dir}:/workspace -v {pub_dir}:/pub_data -p {portssh}:22 -p {portjupyter}:8888 -p {porttsb}:6006 --name c{cid} --cpus={cpu} -m {mem}m -d {real_id}'
     
     # print(docker_cmd)
@@ -75,7 +75,7 @@ def container_init(db:OpenGaussConnector, iid:int, uid:int, name:str, cpu:int, m
     db.exec(cmd)
     # 更新container_gpu表
     if gid is not None:
-        cmd = f'insert into container_gpu (cid, gid) values ({cid}, {gid})'
+        cmd = f'insert into container_gpu (cid, gid, used) values ({cid}, {gid}, 1)'
         db.exec(cmd)
     
     return 0, f"passwd:\'{passwd}\', portssh:{portssh}, portjupyter:{portjupyter}, porttsb:{porttsb}"

@@ -3,7 +3,7 @@ from controler.container_status import container_status
 import subprocess
 from config import *
 
-def container_start(db:OpenGaussConnector, cid:int, uid:int, gid:int | None):
+def container_start(db:OpenGaussConnector, cid:int, uid:int, nouse:int | None):
     # 验证用户身份
     cmd = f'select cid from containers where uid = {uid} and cid = {cid}'
     res = db.exec(cmd)
@@ -34,9 +34,16 @@ def container_start(db:OpenGaussConnector, cid:int, uid:int, gid:int | None):
         used_memory = 0
     if used_cpu + cpu > total_cpu or used_memory + mem > total_memory:
         return -1, 'cpu or memory not enough'
+    # 获取容器之前用的gpu
+    cmd = f'select gid from container_gpu where cid = {cid}'
+    ret = db.exec(cmd)
+    if len(ret) == 0:
+        gid = None
+    else:
+        gid = ret[0][0]
     # 判断gpu是否可用
     if gid is not None:
-        cmd = f'select gid from container_gpu where gid = {gid} and cid != {cid}'
+        cmd = f'select gid from container_gpu where gid = {gid} and cid != {cid} and used = 1'
         if len(db.exec(cmd)) > 0:
             return -1, f'gpu {gid} not available'
 
@@ -51,7 +58,7 @@ def container_start(db:OpenGaussConnector, cid:int, uid:int, gid:int | None):
     
     # 更新container_gpu表
     if gid is not None:
-        cmd = f'insert into container_gpu (cid, gid) values ({cid}, {gid})'
+        cmd = f'update container_gpu set used = 1 where cid = {cid}'
         db.exec(cmd)
     
     return 0, 'success'

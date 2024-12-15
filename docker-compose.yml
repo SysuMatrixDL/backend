@@ -1,26 +1,14 @@
+# 这个文件是用来开发调试后端用的
+
 version: '3'
 services:
-  backend:
-    # build:
-    #   dockerfile: dockerfile
-    image: ghcr.io/sysumatrixdl/backend:master
-    container_name: matrixdl-backend
-    environment:
-      - "BACKEND_HOST=localhost"  # for local dev
-    ports:
-      - "8000:8000"
-    networks:
-      - og-network
-    depends_on:
-      - open-gauss
-
   open-gauss:
     image: ghcr.io/sysumatrixdl/opengauss:latest
     container_name: matrixdl-opengauss
     ports:
       - "5432:5432"
     volumes:
-      - ./sql/open-gauss/data:/opt/openGauss/data
+      - ../deploy/data:/opt/openGauss/data
     networks:
       - og-network
 

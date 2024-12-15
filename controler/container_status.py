@@ -20,7 +20,7 @@ def container_status(db:OpenGaussConnector, cid:int, uid:int=None):
     containers = client.containers(all=True)
     new_status = None
     for c in containers:
-        if c['Names'] == [f'/c{cid}']:
+        if c['Names'][0] == f'/c{cid}':
             if c['State'] == 'running':
                 new_status = 'running'
             else:

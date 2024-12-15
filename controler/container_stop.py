@@ -38,7 +38,7 @@ def container_stop(db:OpenGaussConnector, cid:int, uid:int=None):
     
     # 更新container_gpu表
     if gid is not None:
-        cmd = f'delete from container_gpu where cid = {cid}'
+        cmd = f'update container_gpu set used = 0 where cid = {cid}'
         db.exec(cmd)
     
     return 0, 'success'
