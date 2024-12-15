@@ -3,7 +3,7 @@ FROM python:3.11.10 AS builder
 COPY . .
 
 RUN pip install -r requirements.txt && \
-    pyinstaller --onefile --hidden-import=main -F main.py --clean
+    pyinstaller --onefile --hidden-import=main -F main.py
 
 FROM earthly/dind:ubuntu-24.04-docker-27.3.1-1
 
