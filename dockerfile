@@ -2,11 +2,11 @@ FROM python:3.11.10 AS builder
 
 COPY . .
 
-RUN pip install -r requirements.txt && \
-    pyinstaller --onefile --hidden-import=main -F main.py --clean && \
-    apt install docker openssh-client
+RUN apt-get update && apt-get install -y docker openssh-client && \
+    pip install -r requirements.txt && \
+    pyinstaller --onefile --hidden-import=main -F main.py --clean
 
-FROM ubuntu:22.04
+FROM c
 
 WORKDIR /app
 
