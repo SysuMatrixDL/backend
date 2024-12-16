@@ -112,16 +112,8 @@ def container_property(db:OpenGaussConnector, cid:int):
 
 
 def image_property(db:OpenGaussConnector, iid:int):
-    cmd = f'select i.real_id, i.iid, i.did, i.name, i.public, u.name from images i left join user_images ui on i.iid = ui.iid left join "User" u on ui.uid = u.uid where i.iid = {iid}'
-    real_id, _, did, name, public, user = db.get_one_res(cmd)
-    cmd = f'select d.ip from device d left join images i on d.did = i.iid where d.did = {did}'
-    ip = db.get_one_res(cmd)[0]
-    size = 0
-    client = docker.APIClient(base_url=f'ssh://root@{ip}')
-    images = client.images(all=True)
-    for image in images:
-        if image['Id'] == 'sha256:' + real_id:
-            size = image['Size']
+    cmd = f'select i.real_id, i.iid, i.did, i.name, i.public, u.name, i.size from images i left join user_images ui on i.iid = ui.iid left join "User" u on ui.uid = u.uid where i.iid = {iid}'
+    real_id, _, did, name, public, user, size = db.get_one_res(cmd)
     res = {'did': did, 'name': name, 'public': public, 'user':'public' if user is None else user, 'size': size}
     return res
     

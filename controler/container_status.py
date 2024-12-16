@@ -18,7 +18,7 @@ def container_status(db:OpenGaussConnector, cid:int, uid:int=None):
     # 获取设备ip
     cmd = f'select ip from device where did = (select did from images where iid = ( select iid from containers where cid = {cid}))'
     ip = db.get_one_res(cmd)[0]
-    # 更新容器状态
+    # 更新容器状态,这里是实时状态
     client = docker.APIClient(base_url=f'ssh://root@{ip}')
     containers = client.containers(all=True)
     new_status = None

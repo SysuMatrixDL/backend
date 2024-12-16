@@ -1,5 +1,7 @@
 import subprocess
 
+import docker
+
 from config import *
 
 from common.connect import OpenGaussConnector
@@ -18,11 +20,11 @@ def image_create(db:OpenGaussConnector, cid:int, name:str, uid:int, public:bool)
     返回两个值，第一个值为0表示执行成功，第二个值在执行成功时表示新创建的镜像的iid，否则为报错信息
     """
     # 验证用户身份
-    
     cmd = f'select cid from containers where uid = {uid} and cid = {cid}'
     res = db.exec(cmd)
     if len(res) == 0:
         return -1, f'no container or not authorized to visit'
+    
     # 获取设备ip
     cmd = f'select did, ip from device where did = (select did from images where iid = ( select iid from containers where cid = {cid}))'
     did, ip = db.get_one_res(cmd)
@@ -37,11 +39,20 @@ def image_create(db:OpenGaussConnector, cid:int, name:str, uid:int, public:bool)
 
     # 获取iidr
     iid = get_id(db, 'iid', 'images')
+
+    # 获取镜像大小
+    size = 0
+    client = docker.APIClient(base_url=f'ssh://root@{ip}')
+    images = client.images(all=True)
+    for image in images:
+        if image['Id'] == 'sha256:' + real_id:
+            size = image['Size']
+    
     # 更新images表
-    cmd = f'insert into images values ({iid}, {did}, \'{name}\', \'{real_id}\', \'{public}\')'
-    print(cmd)
+    cmd = f'insert into images values ({iid}, {did}, \'{name}\', \'{real_id}\', \'{public}\', {size})'
     db.exec(cmd)
-    # 更新user_images表
+    
+     # 更新user_images表
     cmd = f'insert into user_images values ({uid}, {iid})'
     db.exec(cmd)
     return 0, iid
