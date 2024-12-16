@@ -43,7 +43,8 @@ def get_device_images(db:OpenGaussConnector, did:int, name: str):
     """
     cmd = f'select i.iid, i.name, u.name, i.public from images i left join user_images ui on i.iid = ui.iid left join "User" u on ui.uid = u.uid where i.did={did}'
     res = db.exec(cmd)
-    res = [{'iid':r[0], 'name': r[1], 'User': 'public'if r[2] is None else r[2], 'public': r[3] } for r in res if r[2] is None or r[2] == name]
+    print(res)
+    res = [{'iid':r[0], 'name': r[1], 'User': 'public'if r[2] is None else r[2], 'public': r[3] } for r in res if r[3] or r[2] == name]
     return res
 
 def device_property(db:OpenGaussConnector, did:int):
